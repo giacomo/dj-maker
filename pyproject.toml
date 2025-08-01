@@ -48,6 +48,7 @@ build-backend = "hatchling.build"
 [dependency-groups]
 dev = [
     "black>=25.1.0",
+    "django-stubs>=5.2.2",
     "mypy>=1.17.1",
     "pytest>=8.4.1",
     "pytest-cov>=6.2.1",
