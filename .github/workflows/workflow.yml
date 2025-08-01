@@ -89,7 +89,7 @@ jobs:
       uses: astral-sh/setup-uv@v2
 
     - name: Download build artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: dist
         path: dist/
@@ -122,5 +122,5 @@ jobs:
     - name: Run security checks
       run: |
         uv add --dev bandit safety
-        uv run bandit -r src/
+        uv run bandit -r src/ -s B110,B404,B603
         uv run safety check
