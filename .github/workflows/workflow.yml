@@ -121,5 +121,6 @@ jobs:
 
     - name: Run security checks
       run: |
+        uv add --dev bandit safety
         uv run bandit -r src/
         uv run safety check
