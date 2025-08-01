@@ -12,15 +12,15 @@ def test_app_help():
     """Test the main app help command."""
     result = runner.invoke(app, ["--help"])
     assert result.exit_code == 0
-    assert "Django CLI" in result.output
-    assert "Modern Django CLI tool" in result.output
+    assert "DJ Maker CLI" in result.output
+    assert "Modern DJ Maker CLI tool" in result.output
 
 
 def test_app_version():
     """Test the version command."""
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
-    assert "Django CLI version:" in result.output
+    assert "DJ Maker CLI version:" in result.output
 
 
 def test_urls_help():

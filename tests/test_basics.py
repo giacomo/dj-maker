@@ -52,7 +52,7 @@ def test_version_command():
     """Test the --version option."""
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
-    assert "Django CLI version:" in result.output
+    assert "DJ Maker CLI version:" in result.output
 
 
 def test_main_command_outside_django_project():
@@ -66,5 +66,5 @@ def test_app_help():
     """Test the main app help command."""
     result = runner.invoke(app, ["--help"])
     assert result.exit_code == 0
-    assert "Django CLI" in result.output
-    assert "Modern Django CLI tool" in result.output
+    assert "DJ Maker CLI" in result.output
+    assert "Modern DJ Maker CLI tool" in result.output

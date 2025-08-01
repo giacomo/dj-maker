@@ -8,12 +8,11 @@ import os
 import sys
 from enum import Enum
 from pathlib import Path
-from typing import Optional, List, Dict, Any, Annotated
+from typing import Optional, List, Dict, Annotated
 
 import typer
 from rich.console import Console
 from rich.table import Table
-from rich import print as rprint
 
 import django
 from django.conf import settings
@@ -125,7 +124,7 @@ def main(
 
     try:
         setup_django()
-    except:
+    except Exception:
         # Continue without Django setup for some commands
         pass
 
@@ -243,14 +242,14 @@ urlpatterns = [
     console.print(f"✅ [green]{action} {urls_file} with {template.value} template[/green]")
 
     # Show next steps
-    console.print(f"\n📝 [bold]Next steps:[/bold]")
-    console.print(f"1. Add to your main urls.py:")
+    console.print("\n📝 [bold]Next steps:[/bold]")
+    console.print("1. Add to your main urls.py:")
     console.print(f"   [cyan]path('{app_name}/', include('{app_name}.urls')),[/cyan]")
-    console.print(f"2. Create the views referenced in the URLs")
+    console.print("2. Create the views referenced in the URLs")
 
     if template == URLTemplate.api:
-        console.print(f"3. Install djangorestframework if not already installed:")
-        console.print(f"   [cyan]uv add djangorestframework[/cyan]")
+        console.print("3. Install djangorestframework if not already installed:")
+        console.print("   [cyan]uv add djangorestframework[/cyan]")
 
 
 @urls_app.command("list")
@@ -355,7 +354,7 @@ def show_templates() -> None:
         table.add_row(template, info["description"], info["use_case"])
 
     console.print(table)
-    console.print(f"\n[dim]Usage: django-cli urls create myapp --template basic[/dim]")
+    console.print("\n[dim]Usage: django-cli urls create myapp --template basic[/dim]")
 
 
 # Original Generate Command (erweitert)
@@ -487,22 +486,22 @@ def generate(
             console.print("   🚫 [dim]HTML templates skipped[/dim]")
 
         # Show next steps
-        console.print(f"\n📝 [bold]Next steps:[/bold]")
+        console.print("\n📝 [bold]Next steps:[/bold]")
         console.print(f"1. Add '{app_name}' to INSTALLED_APPS in settings.py")
 
         if namespace:
             # Show versioned/namespaced URL structure
-            console.print(f"2. Add to your main urls.py with namespace:")
+            console.print("2. Add to your main urls.py with namespace:")
             console.print(f"   [cyan]path('{namespace}/{app_name}/', include('{app_name}.urls')),[/cyan]")
             console.print(f"   [dim]This creates URLs like: {namespace}/{app_name}/{model_name.lower()}-list[/dim]")
         else:
-            console.print(f"2. Add to your main urls.py:")
+            console.print("2. Add to your main urls.py:")
             console.print(f"   [cyan]path('{app_name}/', include('{app_name}.urls')),[/cyan]")
 
         console.print(f"3. Run migrations: [cyan]python manage.py makemigrations {app_name} && python manage.py migrate[/cyan]")
 
         if namespace:
-            console.print(f"\n💡 [bold]URL Examples:[/bold]")
+            console.print("\n💡 [bold]URL Examples:[/bold]")
             console.print(f"   • List: [cyan]/{namespace}/{app_name}/[/cyan] → [dim]{namespace}:{model_name.lower()}-list[/dim]")
             console.print(f"   • Detail: [cyan]/{namespace}/{app_name}/1/[/cyan] → [dim]{namespace}:{model_name.lower()}-detail[/dim]")
             console.print(f"   • Create: [cyan]/{namespace}/{app_name}/create/[/cyan] → [dim]{namespace}:{model_name.lower()}-create[/dim]")
@@ -607,15 +606,15 @@ Thumbs.db
         (project_path / ".gitignore").write_text(gitignore_content)
 
         console.print("✅ [bold green]Successfully created Django project![/bold green]")
-        console.print(f"\n📝 [bold]Next steps:[/bold]")
+        console.print("\n📝 [bold]Next steps:[/bold]")
         console.print(f"1. cd {project_name}")
-        console.print(f"2. python -m venv .venv")
-        console.print(f"3. source .venv/bin/activate  # On Windows: .venv\\Scripts\\activate")
-        console.print(f"4. pip install -r requirements.txt")
-        console.print(f"5. python manage.py migrate")
-        console.print(f"6. python manage.py createsuperuser")
-        console.print(f"7. python manage.py runserver")
-        console.print(f"\n💡 [dim]Use 'django-cli generate appname ModelName' to create CRUD apps[/dim]")
+        console.print("2. python -m venv .venv")
+        console.print("3. source .venv/bin/activate  # On Windows: .venv\\Scripts\\activate")
+        console.print("4. pip install -r requirements.txt")
+        console.print("5. python manage.py migrate")
+        console.print("6. python manage.py createsuperuser")
+        console.print("7. python manage.py runserver")
+        console.print("\n💡 [dim]Use 'django-cli generate appname ModelName' to create CRUD apps[/dim]")
 
     except Exception as e:
         console.print(f"❌ [red]Error creating project: {e}[/red]")

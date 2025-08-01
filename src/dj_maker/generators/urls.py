@@ -3,7 +3,7 @@ URL Generator with comprehensive type annotations
 """
 
 from pathlib import Path
-from typing import List, Dict, Any, Optional, Union, Literal
+from typing import List, Optional, Literal
 from jinja2 import Environment, FileSystemLoader
 
 

@@ -3,9 +3,8 @@ View Generator with comprehensive type annotations
 """
 
 from pathlib import Path
-from typing import List, Dict, Any, Optional, Union, Literal
+from typing import List, Dict, Any, Literal
 from jinja2 import Environment, FileSystemLoader
-import inspect
 from django.apps import apps
 
 
