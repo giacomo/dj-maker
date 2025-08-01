@@ -1,0 +1,56 @@
+{% raw %}{% extends "{% endraw %}{{ app_name }}{% raw %}/base.html" %}
+
+{% block title %}{% endraw %}{{ model_name }}: {{ "{{ object }}" }}{% raw %}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>{% endraw %}{{ model_name }}{% raw %} Details</h1>
+    <div>
+        <a href="{% url '{% endraw %}{{ app_name }}:{{ model_name_lower }}-update{% raw %}' object.pk %}" class="btn btn-warning">
+            <i class="fas fa-edit"></i> Edit
+        </a>
+        <a href="{% url '{% endraw %}{{ app_name }}:{{ model_name_lower }}-delete{% raw %}' object.pk %}" class="btn btn-danger">
+            <i class="fas fa-trash"></i> Delete
+        </a>
+        <a href="{% url '{% endraw %}{{ app_name }}:{{ model_name_lower }}-list{% raw %}' %}" class="btn btn-secondary">
+            <i class="fas fa-list"></i> Back to List
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>{{ object }}</h3>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">ID:</dt>
+                    <dd class="col-sm-9">{{ object.pk }}</dd>
+
+                    {% if object.created_at %}
+                    <dt class="col-sm-3">Created:</dt>
+                    <dd class="col-sm-9">{{ object.created_at|date:"M d, Y H:i" }}</dd>
+                    {% endif %}
+
+                    {% if object.updated_at %}
+                    <dt class="col-sm-3">Updated:</dt>
+                    <dd class="col-sm-9">{{ object.updated_at|date:"M d, Y H:i" }}</dd>
+                    {% endif %}
+
+                    {% comment %}
+                    Add more model fields here as needed:
+
+                    <dt class="col-sm-3">Title:</dt>
+                    <dd class="col-sm-9">{{ object.title }}</dd>
+
+                    <dt class="col-sm-3">Description:</dt>
+                    <dd class="col-sm-9">{{ object.description|default:"No description" }}</dd>
+                    {% endcomment %}
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}{% endraw %}

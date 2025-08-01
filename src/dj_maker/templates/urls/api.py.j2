@@ -1,0 +1,28 @@
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from . import views
+
+app_name = '{{ app_name }}'
+
+{% if model_name %}
+# REST API Router
+router = DefaultRouter()
+router.register(r'{{ model_name|lower }}s', views.{{ model_name }}ViewSet)
+
+urlpatterns = [
+    # API endpoints
+    path('api/', include(router.urls)),
+
+    # Additional API views
+    path('api/{{ model_name|lower }}s/search/', views.{{ model_name }}SearchView.as_view(), name='{{ model_name|lower }}-search'),
+]
+{% else %}
+# REST API Router
+router = DefaultRouter()
+# router.register(r'items', views.ItemViewSet)
+
+urlpatterns = [
+    path('api/', include(router.urls)),
+    # Add your API patterns here
+]
+{% endif %}

@@ -1,0 +1,74 @@
+{% raw %}{% extends "{% endraw %}{{ app_name }}{% raw %}/base.html" %}
+
+{% block title %}
+    {% if object %}
+        Edit {% endraw %}{{ model_name }}{% raw %}
+    {% else %}
+        Add New {% endraw %}{{ model_name }}{% raw %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    {% if object %}
+                        <i class="fas fa-edit"></i> Edit {% endraw %}{{ model_name }}{% raw %}
+                    {% else %}
+                        <i class="fas fa-plus"></i> Add New {% endraw %}{{ model_name }}{% raw %}
+                    {% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">
+                                {{ field.label }}
+                                {% if field.field.required %}
+                                    <span class="text-danger">*</span>
+                                {% endif %}
+                            </label>
+
+                            {{ field.as_widget }}
+
+                            {% if field.help_text %}
+                                <div class="form-text">{{ field.help_text }}</div>
+                            {% endif %}
+
+                            {% if field.errors %}
+                                <div class="text-danger">
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url '{% endraw %}{{ app_name }}:{{ model_name_lower }}-list{% raw %}' %}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            {% if object %}
+                                <i class="fas fa-save"></i> Update {% endraw %}{{ model_name }}{% raw %}
+                            {% else %}
+                                <i class="fas fa-plus"></i> Create {% endraw %}{{ model_name }}{% raw %}
+                            {% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}{% endraw %}
