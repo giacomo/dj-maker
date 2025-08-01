@@ -4,7 +4,7 @@ URL Generator with comprehensive type annotations
 
 from pathlib import Path
 from typing import List, Optional, Literal
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 
 URLTypeOptions = Literal["standard", "api", "advanced"]
@@ -29,7 +29,8 @@ class URLGenerator:
         # Setup Jinja2 environment
         template_dir: Path = Path(__file__).parent.parent / "templates"
         self.jinja_env: Environment = Environment(
-            loader=FileSystemLoader(str(template_dir))
+            loader=FileSystemLoader(str(template_dir)),
+            autoescape=select_autoescape(['html', 'xml'])
         )
 
     def generate_basic_urls(self) -> str:

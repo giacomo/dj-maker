@@ -4,7 +4,7 @@ HTML Template Generator for DJ Maker CLI
 
 from pathlib import Path
 from typing import List, Dict, Any
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 
 class TemplateGenerator:
@@ -19,7 +19,8 @@ class TemplateGenerator:
         # Setup Jinja2 environment
         template_dir: Path = Path(__file__).parent.parent / "templates"
         self.jinja_env: Environment = Environment(
-            loader=FileSystemLoader(str(template_dir))
+            loader=FileSystemLoader(str(template_dir)),
+            autoescape=select_autoescape(['html', 'xml'])
         )
 
     def preview(self) -> List[str]:

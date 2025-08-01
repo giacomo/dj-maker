@@ -4,7 +4,7 @@ View Generator with comprehensive type annotations
 
 from pathlib import Path
 from typing import List, Dict, Any, Literal
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 from django.apps import apps
 
 
@@ -28,7 +28,8 @@ class ViewGenerator:
         # Setup Jinja2 environment
         template_dir: Path = Path(__file__).parent.parent / "templates"
         self.jinja_env: Environment = Environment(
-            loader=FileSystemLoader(str(template_dir))
+            loader=FileSystemLoader(str(template_dir)),
+            autoescape=select_autoescape(['html', 'xml'])
         )
 
     def get_model_fields(self) -> List[Dict[str, Any]]:
