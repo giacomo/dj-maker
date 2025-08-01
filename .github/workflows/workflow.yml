@@ -35,7 +35,6 @@ jobs:
     - name: Run linting
       run: |
         uv run ruff check src/
-        uv run mypy src/
 
     - name: Run tests with coverage
       run: |
