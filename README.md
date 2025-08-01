@@ -1,15 +1,15 @@
-# 🚀 Django CLI - Supercharge Your Django Development
+# 🚀 DJ Maker - Supercharge Your Django Development
 
-[![PyPI version](https://badge.fury.io/py/django-cli.svg)](https://badge.fury.io/py/django-cli)
-[![Python Support](https://img.shields.io/pypi/pyversions/django-cli.svg)](https://pypi.org/project/django-cli/)
+[![PyPI version](https://badge.fury.io/py/dj-maker.svg)](https://badge.fury.io/py/dj-maker)
+[![Python Support](https://img.shields.io/pypi/pyversions/dj-maker.svg)](https://pypi.org/project/dj-maker/)
 [![Django Support](https://img.shields.io/badge/Django-4.2%20|%205.1%20|%205.2-success.svg)](https://www.djangoproject.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Test Coverage](https://img.shields.io/badge/coverage-92%25-brightgreen.svg)](https://github.com/ready24it/django-cli)
-[![Tests](https://img.shields.io/badge/tests-128%20passing-brightgreen.svg)](https://github.com/ready24it/django-cli)
+[![Test Coverage](https://img.shields.io/badge/coverage-92%25-brightgreen.svg)](https://github.com/giacomo/dj-maker)
+[![Tests](https://img.shields.io/badge/tests-128%20passing-brightgreen.svg)](https://github.com/giacomo/dj-maker)
 
 > **Rapidly generate Django apps, models, views, URLs, and templates with a single command.**
 
-Django CLI is a powerful code generation tool that accelerates Django development by automatically creating complete CRUD applications, API endpoints, and boilerplate code. Say goodbye to repetitive tasks and hello to productive development! ⚡
+DJ Maker is a powerful code generation tool that accelerates Django development by automatically creating complete CRUD applications, API endpoints, and boilerplate code. Say goodbye to repetitive tasks and hello to productive development! ⚡
 
 ## ✨ Features
 
@@ -36,14 +36,14 @@ Django CLI is a powerful code generation tool that accelerates Django developmen
 ### Installation
 
 ```bash
-pip install django-cli
+pip install dj-maker
 ```
 
 ### Create Your First Project
 
 ```bash
 # Create a new Django project with best practices
-django-cli init myblog
+dj init myblog
 
 # Navigate to your project
 cd myblog
@@ -53,23 +53,23 @@ cd myblog
 
 ```bash
 # Create a complete blog app with CRUD operations
-django-cli generate blog Post --view-type=class
+dj generate blog Post --view-type=class
 
 # Generate an API-first app with DRF integration
-django-cli generate api articles Article --view-type=api --namespace=v1
+dj generate api articles Article --view-type=api --namespace=v1
 
 # Create function-based views for maximum control
-django-cli generate shop Product --view-type=function
+dj generate shop Product --view-type=function
 ```
 
 ### Initialize Apps in Existing Projects
 
 ```bash
 # Create a new Django app with URLs and tests
-django-cli init-app users
+dj init-app users
 
 # Create app with specific URL template
-django-cli init-app api --url-template=api --include-tests
+dj init-app api --url-template=api --include-tests
 ```
 
 ## 📖 Usage Examples
@@ -79,7 +79,7 @@ django-cli init-app api --url-template=api --include-tests
 Generate a complete blog application with class-based views:
 
 ```bash
-django-cli generate blog Post --view-type=class
+dj generate blog Post --view-type=class
 ```
 
 **Generated structure:**
@@ -105,7 +105,7 @@ blog/
 Create a REST API with Django REST Framework:
 
 ```bash
-django-cli generate api products Product --view-type=api --namespace=v1
+dj generate api products Product --view-type=api --namespace=v1
 ```
 
 **Features:**
@@ -119,7 +119,7 @@ django-cli generate api products Product --view-type=api --namespace=v1
 Generate nested URL structures:
 
 ```bash
-django-cli generate articles Article --view-type=advanced
+dj generate articles Article --view-type=advanced
 ```
 
 **Generated URLs:**
@@ -143,10 +143,10 @@ Create versioned APIs for scalable applications:
 
 ```bash
 # Generate v1 API
-django-cli generate api users User --namespace=api_v1 --view-type=api
+dj generate api users User --namespace=api_v1 --view-type=api
 
 # Generate v2 API (in separate app)
-django-cli generate api_v2 users User --namespace=api_v2 --view-type=api
+dj generate api_v2 users User --namespace=api_v2 --view-type=api
 ```
 
 **URL Structure:**
@@ -192,13 +192,13 @@ Django CLI creates beautiful, responsive templates using Bootstrap 5:
 
 ### Project Management
 ```bash
-django-cli init <project_name>              # Create new Django project
-django-cli init-app <app_name>              # Initialize new app
+dj init <project_name>              # Create new Django project
+dj init-app <app_name>              # Initialize new app
 ```
 
 ### Generation Commands
 ```bash
-django-cli generate <app> <model> [options]
+dj generate <app> <model> [options]
 
 Options:
   --view-type    [function|class|api|advanced]  View type (default: class)
@@ -210,25 +210,25 @@ Options:
 
 ### URL Management
 ```bash
-django-cli urls create <app_name>           # Create urls.py for an app
-django-cli urls list                         # List apps and their URL status
-django-cli urls check <app_name>            # Check specific app's URLs
+dj urls create <app_name>           # Create urls.py for an app
+dj urls list                         # List apps and their URL status
+dj urls check <app_name>            # Check specific app's URLs
 ```
 
 ### Utility Commands
 ```bash
-django-cli list-models [app_name]           # List models in project/app
-django-cli --version                         # Show version information
-django-cli --help                            # Show all available commands
+dj list-models [app_name]           # List models in project/app
+dj --version                         # Show version information
+dj --help                            # Show all available commands
 ```
 
 ## 🛠️ Integration
 
 ### Add to Existing Projects
 
-1. **Install django-cli** in your project environment
+1. **Install dj-maker** in your project environment
 2. **Generate new apps** directly in your existing project
-3. **Update main URLs** manually or let django-cli suggest the integration:
+3. **Update main URLs** manually or let dj suggest the integration:
 
 ```python
 # Add to your main urls.py
@@ -287,8 +287,8 @@ We welcome contributions! Here's how to get started:
 ### Development Setup
 
 ```bash
-git clone https://github.com/ready24it/django-cli.git
-cd django-cli
+git clone https://github.com/giacomo/dj-maker.git
+cd dj-maker
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
@@ -312,9 +312,9 @@ pytest
 
 ## 🐛 Issues & Support
 
-- **Bug Reports**: [GitHub Issues](https://github.com/ready24it/django-cli/issues)
-- **Feature Requests**: [GitHub Discussions](https://github.com/ready24it/django-cli/discussions)
-- **Documentation**: [Wiki](https://github.com/ready24it/django-cli/wiki)
+- **Bug Reports**: [GitHub Issues](https://github.com/ready24it/dj-maker/issues)
+- **Feature Requests**: [GitHub Discussions](https://github.com/ready24it/dj-maker/discussions)
+- **Documentation**: [Wiki](https://github.com/ready24it/dj-maker/wiki)
 
 ## 📄 License
 
@@ -333,6 +333,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Made with ❤️ by [Ready24 IT](https://ready24it.eu)**
 
-[⭐ Star us on GitHub](https://github.com/ready24it/django-cli) | [📦 View on PyPI](https://pypi.org/project/django-cli/) | [📚 Documentation](https://github.com/ready24it/django-cli/wiki)
+[⭐ Star us on GitHub](https://github.com/ready24it/dj-maker) | [📦 View on PyPI](https://pypi.org/project/dj-maker/) | [📚 Documentation](https://github.com/ready24it/dj-maker/wiki)
 
 </div>
