@@ -620,7 +620,7 @@ DATABASE_URL=mysql://user:password@localhost:3306/{project_name}
 # DB_HOST=localhost
 # DB_PORT=3306"""
         elif database == 'oracle':
-            db_config = f"""
+            db_config = """
 # Oracle Database
 # DB_ENGINE=django.db.backends.oracle
 # DB_NAME=your_oracle_service
@@ -629,7 +629,7 @@ DATABASE_URL=mysql://user:password@localhost:3306/{project_name}
 # DB_HOST=localhost
 # DB_PORT=1521"""
         else:  # sqlite3
-            db_config = f"""
+            db_config = """
 # SQLite Database (default)
 # DATABASE_URL=sqlite:///./db.sqlite3
 # DB_ENGINE=django.db.backends.sqlite3
