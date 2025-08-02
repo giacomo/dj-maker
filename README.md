@@ -4,7 +4,7 @@
 [![Python Support](https://img.shields.io/pypi/pyversions/dj-maker.svg)](https://pypi.org/project/dj-maker/)
 [![Django Support](https://img.shields.io/badge/Django-4.2%20|%205.1%20|%205.2-success.svg)](https://www.djangoproject.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Test Coverage](https://img.shields.io/badge/coverage-92%25-brightgreen.svg)](https://github.com/giacomo/dj-maker)
+[![codecov](https://codecov.io/github/giacomo/dj-maker/graph/badge.svg?token=Y112TWO5EE)](https://codecov.io/github/giacomo/dj-maker)
 [![Tests](https://img.shields.io/badge/tests-128%20passing-brightgreen.svg)](https://github.com/giacomo/dj-maker)
 
 > **Rapidly generate Django apps, models, views, URLs, and templates with a single command.**
