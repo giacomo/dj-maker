@@ -6,6 +6,7 @@ Basierend auf dem django-urls Generator
 
 import os
 import sys
+import subprocess
 from enum import Enum
 from pathlib import Path
 from typing import Optional, List, Dict, Annotated
@@ -511,7 +512,6 @@ def generate(
         raise typer.Exit(1)
 
 
-# Rest der ursprünglichen Commands...
 @app.command(rich_help_panel="Project Management")
 def init(
     project_name: Annotated[str, typer.Argument(help="Name of the Django project to create")],
@@ -525,66 +525,138 @@ def init(
     ] = "sqlite3",
 ) -> None:
     """
-    🚀 Create a new Django project with best practices.
+    🚀 Create a new Django project with uv and best practices.
 
-    Creates a new Django project and sets up initial configuration.
+    Creates a new Django project using uv for dependency management.
     """
     try:
         console.print(f"🚀 Creating Django project: [bold blue]{project_name}[/bold blue]")
 
-        # Create Django project
-        cmd = ['django-admin', 'startproject', project_name]
+        # Create project directory
+        current_dir = Path.cwd()
+        project_path = current_dir / project_name
+
+        if project_path.exists():
+            console.print(f"❌ [red]Directory {project_name} already exists[/red]")
+            raise typer.Exit(1)
+
+        project_path.mkdir()
+        console.print(f"📁 Created directory: [blue]{project_name}[/blue]")
+
+        # Change to project directory
+        os.chdir(project_path)
+        console.print(f"📂 Changed to directory: [blue]{project_path}[/blue]")
+
+        # Initialize uv project
+        console.print("🔧 Initializing uv project...")
+        result = subprocess.run(['uv', 'init'], capture_output=True, text=True)
+        if result.returncode != 0:
+            console.print(f"❌ [red]Error initializing uv: {result.stderr}[/red]")
+            raise typer.Exit(1)
+
+        # Add Django with uv
+        console.print("📦 Adding Django...")
+        django_deps = ['django']
+
+        # Add database-specific dependencies
+        if database == 'postgresql':
+            django_deps.append('psycopg2-binary')
+            console.print("📦 Adding PostgreSQL support...")
+        elif database == 'mysql':
+            django_deps.append('mysqlclient')
+            console.print("📦 Adding MySQL support...")
+        elif database == 'oracle':
+            django_deps.append('cx_Oracle')
+            console.print("📦 Adding Oracle support...")
+        # sqlite3 is built into Python, no extra dependency needed
+
+        result = subprocess.run(['uv', 'add'] + django_deps, capture_output=True, text=True)
+        if result.returncode != 0:
+            console.print(f"❌ [red]Error adding Django dependencies: {result.stderr}[/red]")
+            raise typer.Exit(1)
+
+        # Create Django project in current directory
+        console.print("🏗️ Creating Django project structure...")
+        cmd = ['uv', 'run', 'django-admin', 'startproject', 'config', '.']
         if template:
             cmd.extend(['--template', template])
 
-        import subprocess
         result = subprocess.run(cmd, capture_output=True, text=True)
-
         if result.returncode != 0:
-            console.print(f"❌ [red]Error creating project: {result.stderr}[/red]")
+            console.print(f"❌ [red]Error creating Django project: {result.stderr}[/red]")
             raise typer.Exit(1)
 
-        project_path = Path(project_name)
-
         # Create additional directories
-        (project_path / "static").mkdir(exist_ok=True)
-        (project_path / "media").mkdir(exist_ok=True)
-        (project_path / "templates").mkdir(exist_ok=True)
-
-        # Create requirements.txt
-        requirements_content = """Django>=4.2,<6.0
-djangorestframework>=3.14.0
-python-decouple>=3.8
-Pillow>=10.0.0
-"""
-        (project_path / "requirements.txt").write_text(requirements_content)
+        console.print("📁 Creating additional directories...")
+        Path("static").mkdir(exist_ok=True)
+        Path("media").mkdir(exist_ok=True)
+        Path("templates").mkdir(exist_ok=True)
 
         # Create .env.example
+        console.print("🔒 Creating .env.example...")
+
+        # Database configuration based on selected database
+        db_config = ""
+        if database == 'postgresql':
+            db_config = f"""
+# PostgreSQL Database
+DATABASE_URL=postgresql://user:password@localhost:5432/{project_name}
+# Or use individual settings:
+# DB_ENGINE=django.db.backends.postgresql
+# DB_NAME={project_name}
+# DB_USER=your_db_user
+# DB_PASSWORD=your_db_password
+# DB_HOST=localhost
+# DB_PORT=5432"""
+        elif database == 'mysql':
+            db_config = f"""
+# MySQL Database
+DATABASE_URL=mysql://user:password@localhost:3306/{project_name}
+# Or use individual settings:
+# DB_ENGINE=django.db.backends.mysql
+# DB_NAME={project_name}
+# DB_USER=your_db_user
+# DB_PASSWORD=your_db_password
+# DB_HOST=localhost
+# DB_PORT=3306"""
+        elif database == 'oracle':
+            db_config = """
+# Oracle Database
+# DB_ENGINE=django.db.backends.oracle
+# DB_NAME=your_oracle_service
+# DB_USER=your_db_user
+# DB_PASSWORD=your_db_password
+# DB_HOST=localhost
+# DB_PORT=1521"""
+        else:  # sqlite3
+            db_config = """
+# SQLite Database (default)
+# DATABASE_URL=sqlite:///./db.sqlite3
+# DB_ENGINE=django.db.backends.sqlite3
+# DB_NAME=db.sqlite3"""
+
         env_example = f"""# Django Settings
 DEBUG=True
-SECRET_KEY=your-secret-key-here
+SECRET_KEY=your-secret-key-here-change-in-production
 ALLOWED_HOSTS=localhost,127.0.0.1
-
-# Database (uncomment for PostgreSQL)
-# DATABASE_URL=postgresql://user:password@localhost:5432/{project_name}
+{db_config}
 
 # Static/Media Files
 STATIC_URL=/static/
 MEDIA_URL=/media/
 """
-        (project_path / ".env.example").write_text(env_example)
+        Path(".env.example").write_text(env_example, encoding='utf-8')
 
         # Create .gitignore
+        console.print("🚫 Creating .gitignore...")
         gitignore_content = """# Python
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
 .Python
+.venv/
 env/
 venv/
-.venv/
-ENV/
 
 # Django
 *.log
@@ -603,22 +675,23 @@ staticfiles/
 .DS_Store
 Thumbs.db
 """
-        (project_path / ".gitignore").write_text(gitignore_content)
+        Path(".gitignore").write_text(gitignore_content, encoding='utf-8')
 
         console.print("✅ [bold green]Successfully created Django project![/bold green]")
+        console.print(f"\n📁 [bold]Project created in:[/bold] {project_path.absolute()}")
         console.print("\n📝 [bold]Next steps:[/bold]")
-        console.print(f"1. cd {project_name}")
-        console.print("2. python -m venv .venv")
-        console.print("3. source .venv/bin/activate  # On Windows: .venv\\Scripts\\activate")
-        console.print("4. pip install -r requirements.txt")
-        console.print("5. python manage.py migrate")
-        console.print("6. python manage.py createsuperuser")
-        console.print("7. python manage.py runserver")
-        console.print("\n💡 [dim]Use 'django-cli generate appname ModelName' to create CRUD apps[/dim]")
+        console.print(f"1. [cyan]cd {project_name}[/cyan]")
+        console.print("2. [cyan]uv run python manage.py migrate[/cyan]")
+        console.print("3. [cyan]uv run python manage.py createsuperuser[/cyan]")
+        console.print("4. [cyan]uv run python manage.py runserver[/cyan]")
+        console.print("\n💡 [dim]Use 'uv add package-name' to add more dependencies[/dim]")
 
-    except Exception as e:
-        console.print(f"❌ [red]Error creating project: {e}[/red]")
+    except KeyboardInterrupt:
+        console.print("\n❌ [red]Operation cancelled by user[/red]")
         raise typer.Exit(1)
+    except Exception as e:
+            console.print(f"❌ [red]Error creating project: {e}[/red]")
+            raise typer.Exit(1)
 
 
 @app.command(rich_help_panel="App Management")
@@ -626,7 +699,7 @@ def init_app(
     app_name: Annotated[str, typer.Argument(help="Name of the Django app to create")],
     include_urls: Annotated[
         bool,
-        typer.Option("--include-urls", "-u", help="Also generate urls.py")
+        typer.Option("--include-urls/--no-include-urls", "-u", help="Also generate urls.py")
     ] = True,
     url_template: Annotated[
         URLTemplate,
@@ -634,7 +707,7 @@ def init_app(
     ] = URLTemplate.basic,
     include_tests: Annotated[
         bool,
-        typer.Option("--include-tests", help="Generate test files")
+        typer.Option("--include-tests/--no-include-tests", help="Generate test files")
     ] = True,
 ) -> None:
     """

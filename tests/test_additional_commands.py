@@ -143,21 +143,18 @@ def test_init_app_no_urls():
     with runner.isolated_filesystem():
         Path("manage.py").write_text("# Django manage.py")
 
-        def mock_startapp(args):
+        def mock_execute_from_command_line(args):
             # Simulate Django's startapp command by creating the app directory
             app_name = args[2]  # ['manage.py', 'startapp', 'new_app']
             Path(app_name).mkdir()
             Path(app_name, "apps.py").write_text("# Django app")
 
-        # Mock the init_app function directly to test include_urls=False
-        with patch('dj_maker.main.execute_from_command_line', side_effect=mock_startapp), \
+        with patch('dj_maker.main.execute_from_command_line', side_effect=mock_execute_from_command_line), \
              patch('dj_maker.main.create_urls') as mock_create_urls:
 
-            # Since the CLI doesn't support --no-include-urls, we'll test by mocking the function call
-            from dj_maker.main import init_app
-
-            # Call the function directly with include_urls=False
-            init_app("new_app", include_urls=False)
+            # Test with --no-include-urls flag (the actual flag supported by the command)
+            result = runner.invoke(app, ["init-app", "new_app", "--no-include-urls"])
+            assert result.exit_code == 0
 
             # Verify that create_urls was NOT called
             mock_create_urls.assert_not_called()
@@ -172,19 +169,16 @@ def test_init_app_no_tests():
     with runner.isolated_filesystem():
         Path("manage.py").write_text("# Django manage.py")
 
-        def mock_startapp(args):
+        def mock_execute_from_command_line(args):
             # Simulate Django's startapp command by creating the app directory
             app_name = args[2]  # ['manage.py', 'startapp', 'new_app']
             Path(app_name).mkdir()
             Path(app_name, "apps.py").write_text("# Django app")
 
-        with patch('dj_maker.main.execute_from_command_line', side_effect=mock_startapp):
-
-            # Since the CLI doesn't support --no-include-tests, we'll test by calling the function directly
-            from dj_maker.main import init_app
-
-            # Call the function directly with include_tests=False
-            init_app("new_app", include_tests=False)
+        with patch('dj_maker.main.execute_from_command_line', side_effect=mock_execute_from_command_line):
+            # Test with --no-include-tests flag (the actual flag supported by the command)
+            result = runner.invoke(app, ["init-app", "new_app", "--no-include-tests"])
+            assert result.exit_code == 0
 
             # Verify the command succeeded and app was created
             assert Path("new_app").exists()
@@ -219,11 +213,27 @@ def test_generate_dry_run_table_creation():
         with patch('dj_maker.generators.views.ViewGenerator') as mock_view_gen, \
              patch('dj_maker.generators.urls.URLGenerator') as mock_url_gen:
 
-            mock_view_gen.return_value.preview.return_value = ["test_app/views.py", "test_app/forms.py"]
-            mock_url_gen.return_value.preview.return_value = ["test_app/urls.py"]
+            # Mock instances and methods
+            mock_view_instance = MagicMock()
+            mock_url_instance = MagicMock()
+            mock_view_gen.return_value = mock_view_instance
+            mock_url_gen.return_value = mock_url_instance
 
+            # Mock the generate methods to return preview data
+            mock_view_instance.generate.return_value = {
+                'views.py': 'mock view content',
+                'serializers.py': 'mock serializer content'
+            }
+            mock_url_instance.generate.return_value = {
+                'urls.py': 'mock url content'
+            }
+
+            # Test dry-run mode
             result = runner.invoke(app, ["generate", "test_app", "TestModel", "--dry-run"])
+
+            # Should succeed and show the actual output text from the command
             assert result.exit_code == 0
+            # The actual output contains "DRY RUN MODE" based on the error message
             assert "DRY RUN MODE" in result.output
             assert "Files that would be generated" in result.output
 
@@ -247,3 +257,4 @@ def test_generate_actual_file_creation():
             result = runner.invoke(app, ["generate", "test_app", "TestModel"])
             assert result.exit_code == 0
             assert "Generating CRUD" in result.output
+
