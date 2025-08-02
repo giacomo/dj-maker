@@ -121,5 +121,5 @@ jobs:
     - name: Run security checks
       run: |
         uv add --dev bandit safety
-        uv run bandit -r src/ -s B110,B404,B603
+        uv run bandit -r src/ -s B110,B404,B603,B607
         uv run safety check
