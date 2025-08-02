@@ -312,9 +312,9 @@ pytest
 
 ## 🐛 Issues & Support
 
-- **Bug Reports**: [GitHub Issues](https://github.com/ready24it/dj-maker/issues)
-- **Feature Requests**: [GitHub Discussions](https://github.com/ready24it/dj-maker/discussions)
-- **Documentation**: [Wiki](https://github.com/ready24it/dj-maker/wiki)
+- **Bug Reports**: [GitHub Issues](https://github.com/giacomo/dj-maker/issues)
+- **Feature Requests**: [GitHub Discussions](https://github.com/giacomo/dj-maker/discussions)
+- **Documentation**: [Wiki](https://github.com/giacomo/dj-maker/wiki)
 
 ## 📄 License
 
@@ -331,8 +331,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
 
-**Made with ❤️ by [Ready24 IT](https://ready24it.eu)**
+**Made with ❤️ by [Giacomo](https://giacomo.dev)**
 
-[⭐ Star us on GitHub](https://github.com/ready24it/dj-maker) | [📦 View on PyPI](https://pypi.org/project/dj-maker/) | [📚 Documentation](https://github.com/ready24it/dj-maker/wiki)
+[⭐ Star us on GitHub](https://github.com/giacomo/dj-maker) | [📦 View on PyPI](https://pypi.org/project/dj-maker/)
 
 </div>
